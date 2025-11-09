@@ -20,6 +20,7 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: FiHome },
   { name: 'Users', href: '/users', icon: FiUsers },
   { name: 'Courses', href: '/courses', icon: FiBookOpen },
+  { name: 'Learn', href: '/learn', icon: FiBookOpen },
   { name: 'Blogs', href: '/blogs', icon: FiFileText },
   { name: 'Problems', href: '/problems', icon: FiCode },
   { name: 'Analytics', href: '/analytics', icon: FiTrendingUp },

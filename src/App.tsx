@@ -10,6 +10,7 @@ import Blogs from './pages/Blogs'
 import Problems from './pages/Problems'
 import Analytics from './pages/Analytics'
 import Settings from './pages/Settings'
+import Learn from './pages/Learn'
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="users" element={<Users />} />
             <Route path="courses" element={<Courses />} />
+            <Route path="learn" element={<Learn />} />
             <Route path="blogs" element={<Blogs />} />
             <Route path="problems" element={<Problems />} />
             <Route path="analytics" element={<Analytics />} />

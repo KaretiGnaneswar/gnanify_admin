@@ -4,6 +4,9 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { usersService } from '../services/users'
 import { coursesService } from '../services/courses'
 import { blogsService } from '../services/blogs'
+import { categoriesService } from '../services/learn'
+import type { Category } from '../services/learn'
+import AnalyticsSection from '../components/features/learn/AnalyticsSection'
 
 type Stats = {
   totalUsers: number
@@ -30,6 +33,7 @@ export default function Dashboard() {
   })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [learnCategories, setLearnCategories] = useState<Category[]>([])
 
   useEffect(() => {
     fetchDashboardData()
@@ -38,15 +42,17 @@ export default function Dashboard() {
   const fetchDashboardData = async () => {
     try {
       setError(null)
-      const [usersRes, coursesRes, blogsCount] = await Promise.allSettled([
+      const [usersRes, coursesRes, blogsCount, learnRes] = await Promise.allSettled([
         usersService.list(),
         coursesService.list(),
         blogsService.count(),
+        categoriesService.list(),
       ])
 
       const totalUsers = usersRes.status === 'fulfilled' ? usersRes.value.length : 0
       const totalCourses = coursesRes.status === 'fulfilled' ? (Array.isArray(coursesRes.value) ? coursesRes.value.length : 0) : 0
       const totalBlogs = blogsCount.status === 'fulfilled' ? Number(blogsCount.value) : 0
+      const categories = learnRes.status === 'fulfilled' && Array.isArray(learnRes.value) ? learnRes.value : []
 
       setStats(prev => ({
         ...prev,
@@ -59,6 +65,8 @@ export default function Dashboard() {
         activeUsers: 0,
         newUsersToday: 0,
       }))
+
+      setLearnCategories(categories)
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
       setError('Failed to load dashboard data')
@@ -178,6 +186,17 @@ export default function Dashboard() {
               <p className="text-2xl font-semibold text-gray-900">{stats.newUsersToday}</p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Learn Overview */}
+      <div className="card">
+        <div className="card-body space-y-4">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900">Learn Overview</h2>
+            <p className="text-sm text-gray-500">Track categories, subjects, topics, and subtopics across Learn</p>
+          </div>
+          <AnalyticsSection categories={learnCategories} loading={loading} />
         </div>
       </div>
 
